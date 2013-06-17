@@ -29,11 +29,17 @@ namespace TestMvvmLight
                 SimpleIoc.Default.Register<IClientService, ClientService>();
 
             SimpleIoc.Default.Register<ShowClientViewModel>();
+            SimpleIoc.Default.Register<ShowClientListViewModel>();
         }
 
         public ShowClientViewModel ShowClientVM
         {
             get { return ServiceLocator.Current.GetInstance<ShowClientViewModel>(); }
+        }
+
+        public ShowClientListViewModel ShowClientListVM
+        {
+            get { return ServiceLocator.Current.GetInstance<ShowClientListViewModel>(); }
         }
     }
 }

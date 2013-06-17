@@ -9,11 +9,65 @@ using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Shapes;
 using GalaSoft.MvvmLight;
+using TestMvvmLight.Model;
+using System.Runtime.CompilerServices;
 
 namespace TestMvvmLight.ViewModel
 {
     public class ShowClientViewModel : ViewModelBase
     {
+        private readonly IClientService clientService;
 
+        private string _firstName;
+        private string _lastName;
+        private int _age;
+        private SolidColorBrush _isGoodClient;
+
+        public string FirstName
+        {
+            get { return _firstName; }
+            set { NotifyPropertyChanged(ref _firstName, value); }
+        }
+
+        public string LastName
+        {
+            get { return _lastName; }
+            set { NotifyPropertyChanged(ref _lastName, value); }
+        }
+
+        public int Age
+        {
+            get { return _age; }
+            set { NotifyPropertyChanged(ref _age, value); }
+        }
+
+        public SolidColorBrush IsGoodClient
+        {
+            get { return _isGoodClient; }
+            set { NotifyPropertyChanged(ref _isGoodClient, value); }
+        }
+
+        public ShowClientViewModel(IClientService service)
+        {
+            clientService = service;
+            Client client = clientService.Load();
+
+            FirstName = client.FirstName;
+            LastName = client.LastName;
+            Age = client.Age;
+            IsGoodClient = (client.IsGoodClient)
+                ? new SolidColorBrush(Color.FromArgb(100, 0, 255, 0))
+                : new SolidColorBrush(Color.FromArgb(100, 255, 0, 0));
+        }
+
+        private bool NotifyPropertyChanged<T>(ref T variable, T newValue, [CallerMemberName] string propertyName = null)
+        {
+            if (object.Equals(variable, newValue))
+                return false;
+
+            variable = newValue;
+            RaisePropertyChanged(propertyName);
+            return true;
+        }
     }
 }

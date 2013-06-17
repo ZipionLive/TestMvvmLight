@@ -8,6 +8,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Shapes;
+using System.Collections.Generic;
 
 namespace TestMvvmLight.Model
 {
@@ -18,7 +19,7 @@ namespace TestMvvmLight.Model
         public int Age { get; set; }
         public bool IsGoodClient { get; set; }
 
-        public Client(string FirstName, string LastName, int Age, bool IsGoodCustomer)
+        public Client(string FirstName, string LastName, int Age, bool IsGoodClient)
         {
             this.FirstName = FirstName;
             this.LastName = LastName;
@@ -30,6 +31,7 @@ namespace TestMvvmLight.Model
     public interface IClientService
     {
         Client Load();
+        List<Client> LoadList();
     }
 
     public class ClientService : IClientService
@@ -37,6 +39,18 @@ namespace TestMvvmLight.Model
         public Client Load()
         {
             return new Client("Alexandre", "Engelhardt", 29, true);
+        }
+
+
+        public List<Client> LoadList()
+        {
+            return new List<Client>
+            {
+                new Client("Alexandre", "Engelhardt", 29, true),
+                new Client("Simon", "Encev", 27, false),
+                new Client("Marilyn", "Martin", 24, true),
+                new Client("Florence", "Harrer", 25, true)
+            };
         }
     }
 }
@@ -48,6 +62,17 @@ namespace TestMvvmLight.Model.Design
         public Client Load()
         {
             return new Client("Alexandre", "Engelhardt", 29, true);
+        }
+
+        public List<Client> LoadList()
+        {
+            return new List<Client>
+            {
+                new Client("Alexandre", "Engelhardt", 29, true),
+                new Client("Simon", "Encev", 27, false),
+                new Client("Marilyn", "Martin", 24, true),
+                new Client("Florence", "Harrer", 25, true)
+            };
         }
     }
 }
