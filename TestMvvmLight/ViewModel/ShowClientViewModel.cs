@@ -9,15 +9,15 @@ using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Shapes;
 using GalaSoft.MvvmLight;
+using GalaSoft.MvvmLight.Messaging;
 using TestMvvmLight.Model;
 using System.Runtime.CompilerServices;
+using Microsoft.Phone.Shell;
 
 namespace TestMvvmLight.ViewModel
 {
     public class ShowClientViewModel : ViewModelBase
     {
-        private readonly IClientService clientService;
-
         private string _firstName;
         private string _lastName;
         private int _age;
@@ -47,11 +47,15 @@ namespace TestMvvmLight.ViewModel
             set { NotifyPropertyChanged(ref _isGoodClient, value); }
         }
 
-        public ShowClientViewModel(IClientService service)
+        public ShowClientViewModel()
         {
-            clientService = service;
-            Client client = clientService.Load();
+            Messenger.Default.Register<Client>(this, UpdateClient);
+            Client client = PhoneApplicationService.Current.State["Client"] as Client;
+            UpdateClient(client);
+        }
 
+        private void UpdateClient(Client client)
+        {
             FirstName = client.FirstName;
             LastName = client.LastName;
             Age = client.Age;

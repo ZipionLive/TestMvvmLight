@@ -30,12 +30,5 @@ namespace TestMvvmLight.View
             PhoneApplicationService.Current.State["Client"] = client;
             NavigationService.Navigate(new Uri("/View/ShowClientView.xaml", UriKind.Relative));
         }
-
-        private void ListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            //uncomment to disable selection
-            //if (sender != null && sender.GetType() == typeof(ListBox))
-            //    (sender as ListBox).SelectedIndex = -1;
-        }
     }
 }

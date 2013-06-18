@@ -7,13 +7,15 @@
     xmlns:shell="clr-namespace:Microsoft.Phone.Shell;assembly=Microsoft.Phone"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:com="clr-namespace:GalaSoft.MvvmLight.Command;assembly=GalaSoft.MvvmLight.Extras.WP71"
+    xmlns:int="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
     FontFamily="{StaticResource PhoneFontFamilyNormal}"
     FontSize="{StaticResource PhoneFontSizeNormal}"
     Foreground="{StaticResource PhoneForegroundBrush}"
     Background="Black"
     SupportedOrientations="Portrait" Orientation="Portrait"
     mc:Ignorable="d" d:DesignHeight="768" d:DesignWidth="480"
-    shell:SystemTray.IsVisible="True">
+    shell:SystemTray.IsVisible="True" >
 
     <!--LayoutRoot est la grille racine où tout le contenu de la page est placé-->
     <Grid x:Name="LayoutRoot" Background="Transparent">
@@ -31,8 +33,13 @@
         <!--ContentPanel - placez tout contenu supplémentaire ici-->
         <Grid x:Name="ContentPanel" Grid.Row="1" Margin="12,0,12,12">
             <ListBox ItemsSource="{Binding ClientList}"
-                     SelectedItem="{Binding Selection, Mode=TwoWay}"
-                     SelectionChanged="ListBox_SelectionChanged">
+                     SelectedItem="{Binding Selection, Mode=TwoWay}">
+                <int:Interaction.Triggers>
+                    <int:EventTrigger EventName="SelectionChanged">
+                        <com:EventToCommand Command="{Binding ElementSelectionCommand}"
+                                            PassEventArgsToCommand="True" />
+                    </int:EventTrigger>
+                </int:Interaction.Triggers>
                 <ListBox.ItemTemplate>
                     <DataTemplate>
                         <Border Padding="6" Margin="0,0,0,12" Height="Auto" Width="456"
@@ -41,13 +48,9 @@
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="*" />
                                     <ColumnDefinition Width="Auto" />
-                                    <ColumnDefinition Width="Auto" />
                                 </Grid.ColumnDefinitions>
                                 <TextBlock Grid.Column="0" Text="{Binding LastName}" />
-                                <Button x:Name="btnDetails"  Grid.Column="1" Content="Show Details"
-                                        Command="{Binding Source={StaticResource Locator}, Path=ShowClientListVM.ShowDetailsCommand}"
-                                        CommandParameter="{Binding}" />
-                                <Button x:Name="btnToggle" Grid.Column="2" Content="Toggle"
+                                <Button x:Name="btnToggle" Grid.Column="1" Content="Toggle"
                                         Command="{Binding Source={StaticResource Locator}, Path=ShowClientListVM.ToggleCommand}"
                                         CommandParameter="{Binding}" />
                             </Grid>

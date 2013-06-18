@@ -37,15 +37,12 @@ namespace TestMvvmLight.ViewModel
         public Client Selection
         {
             get { return _selection; }
-            set
-            {
-                NotifyPropertyChanged(ref _selection, value);
-                Messenger.Default.Send(Selection);
-            }
+            set { NotifyPropertyChanged(ref _selection, value); }
         }
 
         public ICommand ShowDetailsCommand { get; set; }
         public ICommand ToggleCommand { get; set; }
+        public ICommand ElementSelectionCommand { get; set; }
         #endregion
 
         #region Constructor
@@ -55,6 +52,7 @@ namespace TestMvvmLight.ViewModel
 
             ShowDetailsCommand = new RelayCommand<Client>(ShowDetails, CanExecuteShowDetails);
             ToggleCommand = new RelayCommand<Client>(Toggle);
+            ElementSelectionCommand = new RelayCommand<SelectionChangedEventArgs>(ElementSelection);
         }
         #endregion
 
@@ -85,6 +83,15 @@ namespace TestMvvmLight.ViewModel
             CheckCommandState();
         }
 
+        private void ElementSelection(SelectionChangedEventArgs e)
+        {
+            if (Selection != null)
+            {
+                Messenger.Default.Send(Selection);
+                Selection = null;
+            }
+        }
+
         private bool CanExecuteShowDetails(Client client)
         {
             if (client == null) return false;
@@ -93,8 +100,9 @@ namespace TestMvvmLight.ViewModel
 
         private void CheckCommandState()
         {
-            if (ShowDetailsCommand != null) ((RelayCommand<Client>)ShowDetailsCommand).RaiseCanExecuteChanged();
+            if (ShowDetailsCommand != null) (ShowDetailsCommand as RelayCommand<Client>).RaiseCanExecuteChanged();
         }
         #endregion
+
     }
 }
